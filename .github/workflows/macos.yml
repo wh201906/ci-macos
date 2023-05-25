@@ -45,11 +45,15 @@ jobs:
         working-directory: ${{ runner.temp }}/shadow_build_dir
         run:  |
               export JOBS=$((`sysctl -n hw.ncpu`+1))
-              qmake -r ${SOURCE_DIR}/src/SerialTest.pro CONFIG+=app_bundle
+              qmake -r ${SOURCE_DIR}/src/SerialTest.pro CONFIG+=app_bundle QMAKE_APPLE_DEVICE_ARCHS="x86_64 arm64"
               make -j$JOBS
+
+      - name: Generate DMG file
+        run: |
+          macdeployqt ${{ runner.temp }}/shadow_build_dir/SerialTest.app -dmg -verbose=2
 
       - name: Save artifact
         uses: actions/upload-artifact@master
         with:
           name: ${{ env.ARTIFACT }}
-          path: ${{ runner.temp }}/shadow_build_dir/package/${{ env.ARTIFACT }}
+          path: ${{ runner.temp }}/shadow_build_dir/**/${{ env.ARTIFACT }}
