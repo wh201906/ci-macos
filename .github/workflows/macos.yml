@@ -1,7 +1,6 @@
 name: MacOS Release
 
-on:
-  workflow_dispatch
+on: [workflow_dispatch, push]
 
 defaults:
   run:
