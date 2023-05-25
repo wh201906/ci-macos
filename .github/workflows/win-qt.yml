@@ -1,0 +1,100 @@
+name: Windows Release (Qt)
+
+on: workflow_dispatch
+
+defaults:
+  run:
+    shell: pwsh
+
+env:
+  CC: gcc
+  SOURCE_DIR:   ${{ github.workspace }}/SerialTest
+  QT_VERSION:   5.15.9
+  # ARTIFACT:     SerialTest.dmg
+
+jobs:
+  build:
+    runs-on:  windows-latest
+
+    steps:
+
+      - name: Downgrade MinGW-w64
+        run: |
+          choco install mingw --version=8.1.0 --allow-downgrade
+
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Checkout SerialTest
+        run: |
+          git clone https://github.com/wh201906/SerialTest
+
+      - name: Download QCustomPlot
+        run: |
+          Invoke-WebRequest "https://www.qcustomplot.com/release/2.1.1/QCustomPlot-source.tar.gz" -outfile "QCustomPlot-source.tar.gz" -Passthru
+          tar -xvzf QCustomPlot-source.tar.gz
+          cp qcustomplot-source/qcustomplot.* SerialTest/src
+
+      - name: Download Qt source
+        run: |
+          Invoke-WebRequest "https://download.qt.io/official_releases/qt/5.15/${{ env.QT_VERSION }}/single/qt-everywhere-opensource-src-${{ env.QT_VERSION }}.tar.xz" -outfile "Qt-source.tar.xz" -Passthru
+
+
+      - name: Extract Qt source
+        run: |
+          7z x Qt-source.tar.xz
+          tar -xkf Qt-source.tar
+          mkdir qt5
+          mkdir build
+          rm Qt-source.tar.xz
+          rm Qt-source.tar
+
+      - name: Configure Qt
+        run: |
+          
+          cd build
+          ../qt-everywhere-src-${{ env.QT_VERSION }}/configure.bat --disable-rpath `
+            -no-warnings-are-errors -prefix $pwd/../qt5 -platform win32-g++ `
+            -opensource -confirm-license -release -nomake examples -nomake tests `
+            -no-compile-examples -no-feature-testlib -skip qt3d -skip qtactiveqt -skip `
+            qtcanvas3d -skip qtcharts -skip qtdatavis3d -skip qtdeclarative -skip qtdoc `
+            -skip qtgamepad -skip qtgraphicaleffects -skip qtmacextras -skip qtmultimedia `
+            -skip qtnetworkauth -skip qtpurchasing -skip qtquickcontrols -skip qtquickcontrols2 `
+            -skip qtremoteobjects -skip qtscxml -skip qtspeech -skip qtwayland -skip qtwebview `
+            -skip qtwinextras -skip qtx11extras -skip qtwebengine -skip qtlocation -skip `
+            qtlottie -skip qtquick3d -skip qtquicktimeline -skip qtscript -skip qtsensors `
+            -skip qtserialbus -skip qtxmlpatterns -skip qtwebglplugin -skip `
+            qtwebchannel -skip qtvirtualkeyboard -skip qttranslations -opengl desktop
+
+      - name: Build Qt
+        run: |
+          cd build
+          mingw32-make -j $(nproc)
+      
+      - name: Install Qt
+        run: |
+          cd build
+          mingw32-make -j 1 install
+
+      - name: Create build directory
+        run:  mkdir ${{ runner.temp }}/shadow_build_dir
+
+      - name: Build
+        run:  |
+              ${{ github.workspace }}/qt5/bin/qmake -r SerialTest/src/SerialTest.pro
+              mingw32-make -j $(nproc)
+
+      - name: Show dependency
+        run: |
+          ldd ./release/SerialTest.exe
+          ./release/SerialTest.exe --help
+
+      # - name: Generate DMG file
+      #   run: |
+      #     ${{ github.workspace }}/qt5/bin/macdeployqt ${{ runner.temp }}/shadow_build_dir/SerialTest.app -dmg -verbose=2
+
+      # - name: Save artifact
+      #   uses: actions/upload-artifact@master
+      #   with:
+      #     name: ${{ env.ARTIFACT }}
+      #     path: ${{ runner.temp }}/shadow_build_dir/**/${{ env.ARTIFACT }}

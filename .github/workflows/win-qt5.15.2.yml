@@ -1,0 +1,115 @@
+name: Windows CI (MinGW-w64, MSYS2)
+
+on: [ workflow_dispatch, push ]
+
+defaults:
+  run:
+    shell: pwsh
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [ win32, win64 ]
+    runs-on:  windows-latest
+
+    steps:
+      - name: Uninstall builtin mingw
+        run: choco uninstall mingw
+
+      - name: Install Qt 1
+        id: qt1
+        continue-on-error: true
+        uses: jurplel/install-qt-action@v3
+        with:
+          aqtversion: '==3.1.*'
+          version: '5.15.2'
+          host: 'windows'
+          target: 'desktop'
+          arch: '${{ matrix.arch }}_mingw81'
+          tools: 'tools_mingw,qt.tools.${{ matrix.arch }}_mingw810'
+
+      - name: Install Qt 2
+        id: qt2
+        continue-on-error: true
+        if: steps.qt1.outcome == 'failure'
+        uses: jurplel/install-qt-action@v3
+        with:
+          aqtversion: '==3.1.*'
+          version: '5.15.2'
+          host: 'windows'
+          target: 'desktop'
+          arch: '${{ matrix.arch }}_mingw81'
+          tools: 'tools_mingw,qt.tools.${{ matrix.arch }}_mingw810'
+
+      - name: Install Qt 3
+        id: qt3
+        continue-on-error: true
+        if: steps.qt2.outcome == 'failure'
+        uses: jurplel/install-qt-action@v3
+        with:
+          aqtversion: '==3.1.*'
+          version: '5.15.2'
+          host: 'windows'
+          target: 'desktop'
+          arch: '${{ matrix.arch }}_mingw81'
+          tools: 'tools_mingw,qt.tools.${{ matrix.arch }}_mingw810'
+
+      - name: Install Qt 4
+        id: qt4
+        continue-on-error: true
+        if: steps.qt3.outcome == 'failure'
+        uses: jurplel/install-qt-action@v3
+        with:
+          aqtversion: '==3.1.*'
+          version: '5.15.2'
+          host: 'windows'
+          target: 'desktop'
+          arch: '${{ matrix.arch }}_mingw81'
+          tools: 'tools_mingw,qt.tools.${{ matrix.arch }}_mingw810'
+
+      - name: Install Qt 5
+        id: qt5
+        continue-on-error: true
+        if: steps.qt4.outcome == 'failure'
+        uses: jurplel/install-qt-action@v3
+        with:
+          aqtversion: '==3.1.*'
+          version: '5.15.2'
+          host: 'windows'
+          target: 'desktop'
+          arch: '${{ matrix.arch }}_mingw81'
+          tools: 'tools_mingw,qt.tools.${{ matrix.arch }}_mingw810'
+
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Checkout SerialTest
+        run: |
+          git clone https://github.com/wh201906/SerialTest
+
+      - name: Download QCustomPlot
+        run: |
+          Invoke-WebRequest "https://www.qcustomplot.com/release/2.1.1/QCustomPlot-source.tar.gz" -outfile "QCustomPlot-source.tar.gz" -Passthru
+          tar -xvzf QCustomPlot-source.tar.gz
+          cp qcustomplot-source/qcustomplot.* SerialTest/src
+
+      - name: Build
+        run:  |
+          qmake -r SerialTest/src/SerialTest.pro
+          make -j $(nproc)
+          make clean
+
+      - name: Copy DLLs
+        run: |
+          cd ./release
+          windeployqt ./SerialTest.exe
+          python ../SerialTest/pack/find_dlls.py ./SerialTest.exe
+          ls
+
+      - name: Save artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: SerialTest-${{ matrix.arch }}
+          path: ./release/*

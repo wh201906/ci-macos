@@ -1,0 +1,59 @@
+name: MacOS Release
+
+on: workflow_dispatch
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  SOURCE_DIR:   ${{ github.workspace }}/SerialTest
+  QT_VERSION:   5.15.2
+  ARTIFACT:     SerialTest.dmg
+
+jobs:
+  build:
+    runs-on:  macos-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Checkout SerialTest
+        run: |
+          git clone https://github.com/wh201906/SerialTest
+
+      - name: Download QCustomPlot
+        run: |
+          wget https://www.qcustomplot.com/release/2.1.1/QCustomPlot-source.tar.gz
+          tar -xzf QCustomPlot-source.tar.gz
+          cp qcustomplot-source/qcustomplot.* SerialTest/src
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version:      ${{ env.QT_VERSION }}
+          host:         mac
+          target:       desktop
+          dir:          ${{ runner.temp }}
+          setup-python: false
+
+      - name: Create build directory
+        run:  mkdir ${{ runner.temp }}/shadow_build_dir
+
+      - name: Build
+        working-directory: ${{ runner.temp }}/shadow_build_dir
+        run:  |
+              export JOBS=$((`sysctl -n hw.ncpu`+1))
+              qmake -r ${SOURCE_DIR}/src/SerialTest.pro CONFIG+=app_bundle
+              make -j$JOBS
+
+      - name: Generate DMG file
+        run: |
+          macdeployqt ${{ runner.temp }}/shadow_build_dir/SerialTest.app -dmg -verbose=2
+
+      - name: Save artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: ${{ env.ARTIFACT }}
+          path: ${{ runner.temp }}/shadow_build_dir/**/${{ env.ARTIFACT }}

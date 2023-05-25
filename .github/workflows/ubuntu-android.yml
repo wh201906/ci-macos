@@ -1,0 +1,48 @@
+name: Android Release
+
+on: workflow_dispatch
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  SOURCE_DIR:   ${{ github.workspace }}/SerialTest
+
+jobs:
+  build:
+    runs-on:  ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Checkout SerialTest
+        run: |
+          git clone https://github.com/wh201906/SerialTest
+
+      - name: Download QCustomPlot
+        run: |
+          wget https://www.qcustomplot.com/release/2.1.1/QCustomPlot-source.tar.gz
+          tar -xzf QCustomPlot-source.tar.gz
+          cp qcustomplot-source/qcustomplot.* SerialTest/src
+
+      - name: Install Qt
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qtbase5-dev qt5-qmake qtbase5-dev-tools libqt5serialport5-dev qtconnectivity5-dev
+
+      - name: Create build directory
+        run:  mkdir ${{ runner.temp }}/shadow_build_dir
+
+      - name: Build
+        working-directory: ${{ runner.temp }}/shadow_build_dir
+        run:  |
+              qmake -r ${SOURCE_DIR}/src/SerialTest.pro ANDROID_ABIS="armeabi-v7a arm64-v8a x86 x86_64"
+              make -j$(nproc) apk_install_target
+              androiddeployqt --release --output ./ --input android-SerialTest-deployment-settings.json
+
+      - name: Show files
+        working-directory: ${{ runner.temp }}/shadow_build_dir
+        run: |
+          ls -l
