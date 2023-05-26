@@ -35,6 +35,7 @@ jobs:
           tar -xkf qt-everywhere-opensource-src-5.15.5.tar.xz
           mkdir qt5
           mkdir build
+          cp patch/qiosurfacegraphicsbuffer.h qt-everywhere-src-5.15.5/src/plugins/platforms/cocoa
           cd build
           ../qt-everywhere-src-5.15.5/configure --disable-rpath \
             -no-warnings-are-errors -prefix $(pwd)/../qt5 \
