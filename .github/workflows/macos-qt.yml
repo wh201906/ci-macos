@@ -8,7 +8,7 @@ defaults:
 
 env:
   SOURCE_DIR:   ${{ github.workspace }}/SerialTest
-  QT_VERSION:   5.15.2
+  QT_VERSION:   5.15.8
   ARTIFACT:     SerialTest.dmg
 
 jobs:
@@ -31,13 +31,12 @@ jobs:
 
       - name: Install Qt
         run: |
-          wget -cq https://download.qt.io/official_releases/qt/5.15/5.15.5/single/qt-everywhere-opensource-src-5.15.5.tar.xz
-          tar -xkf qt-everywhere-opensource-src-5.15.5.tar.xz
+          wget -cq https://download.qt.io/official_releases/qt/5.15/5.15.8/single/qt-everywhere-opensource-src-5.15.8.tar.xz
+          tar -xkf qt-everywhere-opensource-src-5.15.8.tar.xz
           mkdir qt5
           mkdir build
-          cp patch/qiosurfacegraphicsbuffer.h qt-everywhere-src-5.15.5/src/plugins/platforms/cocoa
           cd build
-          ../qt-everywhere-src-5.15.5/configure --disable-rpath \
+          ../qt-everywhere-src-5.15.8/configure --disable-rpath \
             -no-warnings-are-errors -prefix $(pwd)/../qt5 \
             -opensource -confirm-license -release -nomake examples -nomake tests \
             -no-compile-examples -no-feature-testlib -skip qt3d -skip qtactiveqt -skip \
