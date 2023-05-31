@@ -7,6 +7,7 @@ defaults:
     shell: pwsh
 
 env:
+  CC: gcc
   SOURCE_DIR:   ${{ github.workspace }}/SerialTest
   QT_VERSION:   5.15.9
   # ARTIFACT:     SerialTest.dmg
@@ -16,6 +17,10 @@ jobs:
     runs-on:  windows-latest
 
     steps:
+      - name: Install packages
+        run: |
+          choco install wget --no-progress 
+
       - name: Checkout repo
         uses: actions/checkout@v3
 
