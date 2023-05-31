@@ -38,7 +38,7 @@ jobs:
       - name: Extract Qt source
         run: |
           7z x Qt-source.tar.xz
-          tar -xkf Qt-source.tar.xz
+          tar -xvvkf Qt-source.tar.xz
           mkdir qt5
           mkdir build
       
