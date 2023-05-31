@@ -17,10 +17,6 @@ jobs:
     runs-on:  windows-latest
 
     steps:
-      - name: Install packages
-        run: |
-          choco install wget --no-progress 
-
       - name: Checkout repo
         uses: actions/checkout@v3
 
@@ -30,14 +26,14 @@ jobs:
 
       - name: Download QCustomPlot
         run: |
-          wget https://www.qcustomplot.com/release/2.1.1/QCustomPlot-source.tar.gz
-          tar -xzf QCustomPlot-source.tar.gz
+          Invoke-WebRequest "https://www.qcustomplot.com/release/2.1.1/QCustomPlot-source.tar.gz" -outfile "QCustomPlot-source.tar.gz" -Passthru
+          tar -xvzf QCustomPlot-source.tar.gz
           cp qcustomplot-source/qcustomplot.* SerialTest/src
 
       - name: Install Qt
         run: |
-          wget https://download.qt.io/official_releases/qt/5.15/${{ env.QT_VERSION }}/single/qt-everywhere-opensource-src-${{ env.QT_VERSION }}.tar.xz
-          tar -xkf qt-everywhere-opensource-src-${{ env.QT_VERSION }}.tar.xz
+          Invoke-WebRequest "https://download.qt.io/official_releases/qt/5.15/${{ env.QT_VERSION }}/single/qt-everywhere-opensource-src-${{ env.QT_VERSION }}.tar.xz" -outfile "Qt-source.tar.xz" -Passthru
+          tar -xvkf Qt-source.tar.xz
           mkdir qt5
           mkdir build
           cd build
