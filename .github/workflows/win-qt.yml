@@ -36,7 +36,7 @@ jobs:
 
       - name: Install Qt
         run: |
-          wget -cq https://download.qt.io/official_releases/qt/5.15/${{ env.QT_VERSION }}/single/qt-everywhere-opensource-src-${{ env.QT_VERSION }}.tar.xz
+          wget https://download.qt.io/official_releases/qt/5.15/${{ env.QT_VERSION }}/single/qt-everywhere-opensource-src-${{ env.QT_VERSION }}.tar.xz
           tar -xkf qt-everywhere-opensource-src-${{ env.QT_VERSION }}.tar.xz
           mkdir qt5
           mkdir build
