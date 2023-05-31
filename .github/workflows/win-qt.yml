@@ -45,7 +45,6 @@ jobs:
       - name: Configure Qt
         run: |
           cd build
-          export JOBS=$((`sysctl -n hw.ncpu`+1))
           ../qt-everywhere-src-${{ env.QT_VERSION }}/configure --disable-rpath \
             -no-warnings-are-errors -prefix $(pwd)/../qt5 \
             -opensource -confirm-license -release -nomake examples -nomake tests \
@@ -62,7 +61,7 @@ jobs:
       - name: Build Qt
         run: |
           cd build
-          make -j$JOBS
+          make -j
       
       - name: Install Qt
         run: |
