@@ -37,7 +37,7 @@ jobs:
 
       - name: Extract Qt source
         run: |
-          Expand-Archive -LiteralPath "Qt-source.tar.xz" -DestinationPath "./"
+          tar -xvkf Qt-source.tar.xz
           mkdir qt5
           mkdir build
       
