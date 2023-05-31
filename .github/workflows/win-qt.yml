@@ -41,6 +41,8 @@ jobs:
           tar -xkf Qt-source.tar
           mkdir qt5
           mkdir build
+          rm Qt-source.tar.xz
+          rm Qt-source.tar
       
       - name: Configure Qt
         run: |
