@@ -44,11 +44,14 @@ jobs:
           rm Qt-source.tar.xz
           rm Qt-source.tar
       
-      - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v1.1
+      - name: Set up Visual Studio shell
+        uses: egor-tensin/vs-shell@v2
+        with:
+          arch: x64
 
       - name: Configure Qt
         run: |
+          
           cd build
           ../qt-everywhere-src-${{ env.QT_VERSION }}/configure.bat --disable-rpath \
             -no-warnings-are-errors -prefix $pwd/../qt5 \
