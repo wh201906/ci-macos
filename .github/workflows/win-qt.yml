@@ -33,7 +33,11 @@ jobs:
       - name: Download Qt source
         run: |
           Invoke-WebRequest "https://download.qt.io/official_releases/qt/5.15/${{ env.QT_VERSION }}/single/qt-everywhere-opensource-src-${{ env.QT_VERSION }}.tar.xz" -outfile "Qt-source.tar.xz" -Passthru
-          tar -xvkf Qt-source.tar.xz
+
+
+      - name: Extract Qt source
+        run: |
+          Expand-Archive -LiteralPath "Qt-source.tar.xz" -DestinationPath "./"
           mkdir qt5
           mkdir build
       
