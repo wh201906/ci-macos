@@ -13,13 +13,22 @@ env:
   # ARTIFACT:     SerialTest.dmg
 
 jobs:
+  find:
+    runs-on:  windows-latest
+    strategy:
+      matrix:
+        file: [fxc.exe, d3dcompiler.h, d3d11.lib, libd3d11.a, egl.h]
+
+    steps:
+      - name: Find
+        continue-on-error: true
+        run: |
+          Get-ChildItem -Path C:\ -Recurse -EA 0 ${{ matrix.file }}
+    
   build:
     runs-on:  windows-latest
 
     steps:
-      - name: Test
-        run: |
-          Get-ChildItem -Path D:\ -Recurse -EA 0 fxc.exe
 
       - name: Downgrade MinGW-w64
         run: |
