@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: Test
         run: |
-          choco install mingw --version=8.5.0 --force --allow-downgrade
+          choco install mingw --version=8.5.0 --allow-downgrade
 
 
       - name: Checkout repo
