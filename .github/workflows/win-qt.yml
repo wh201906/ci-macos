@@ -17,11 +17,6 @@ jobs:
     runs-on:  windows-latest
 
     steps:
-      - name: Test
-        run: |
-          gcm gcc
-          gcm mingw32-make
-
       - name: Checkout repo
         uses: actions/checkout@v3
 
@@ -74,12 +69,12 @@ jobs:
       - name: Build Qt
         run: |
           cd build
-          make -j
+          mingw32-make -j
       
       - name: Install Qt
         run: |
           cd build
-          sudo make -j1 install
+          mingw32-make -j1 install
 
       - name: Create build directory
         run:  mkdir ${{ runner.temp }}/shadow_build_dir
@@ -88,7 +83,7 @@ jobs:
         working-directory: ${{ runner.temp }}/shadow_build_dir
         run:  |
               ${{ github.workspace }}/qt5/bin/qmake -r ${SOURCE_DIR}/src/SerialTest.pro
-              make -j
+              mingw32-make -j
 
       # - name: Generate DMG file
       #   run: |
