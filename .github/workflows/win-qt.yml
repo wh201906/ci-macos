@@ -9,7 +9,7 @@ defaults:
 env:
   CC: gcc
   SOURCE_DIR:   ${{ github.workspace }}/SerialTest
-  QT_VERSION:   5.15.2
+  QT_VERSION:   5.15.9
   # ARTIFACT:     SerialTest.dmg
 
 jobs:
@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: Test
         run: |
-          choco install mingw --version=8.5.0 --allow-downgrade
+          choco install mingw --version=8.1.0 --allow-downgrade
 
 
       - name: Checkout repo
