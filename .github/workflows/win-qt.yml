@@ -17,10 +17,9 @@ jobs:
     runs-on:  windows-latest
 
     steps:
-      - name: Test
+      - name: Downgrade MingW-w64
         run: |
           choco install mingw --version=8.1.0 --allow-downgrade
-
 
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -48,11 +47,6 @@ jobs:
           mkdir build
           rm Qt-source.tar.xz
           rm Qt-source.tar
-      
-      # - name: Set up Visual Studio shell
-      #   uses: egor-tensin/vs-shell@v2
-      #   with:
-      #     arch: x64
 
       - name: Configure Qt
         run: |
@@ -74,7 +68,7 @@ jobs:
       - name: Build Qt
         run: |
           cd build
-          mingw32-make -j
+          mingw32-make -j$(nproc)
       
       - name: Install Qt
         run: |
@@ -88,7 +82,7 @@ jobs:
         working-directory: ${{ runner.temp }}/shadow_build_dir
         run:  |
               ${{ github.workspace }}/qt5/bin/qmake -r ${SOURCE_DIR}/src/SerialTest.pro
-              mingw32-make -j
+              mingw32-make -j$(nproc)
 
       # - name: Generate DMG file
       #   run: |
