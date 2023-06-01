@@ -63,7 +63,7 @@ jobs:
             -skip qtwinextras -skip qtx11extras -skip qtwebengine -skip qtlocation -skip `
             qtlottie -skip qtquick3d -skip qtquicktimeline -skip qtscript -skip qtsensors `
             -skip qtserialbus -skip qtxmlpatterns -skip qtwebglplugin -skip `
-            qtwebchannel -skip qtvirtualkeyboard -skip qttranslations -opengl desktop
+            qtwebchannel -skip qtvirtualkeyboard -skip qttranslations -opengl dynamic
 
       - name: Build Qt
         run: |
