@@ -83,7 +83,7 @@ jobs:
         run:  mkdir ${{ runner.temp }}/shadow_build_dir
 
       - name: Build
-        working-directory: ${{ runner.temp }}/shadow_build_dir
+
         run:  |
               ${{ github.workspace }}/qt5/bin/qmake -r SerialTest/src/SerialTest.pro
               mingw32-make -j $(nproc)
