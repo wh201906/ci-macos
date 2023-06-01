@@ -54,7 +54,7 @@ jobs:
           
           cd build
           ../qt-everywhere-src-${{ env.QT_VERSION }}/configure.bat --disable-rpath `
-            -no-warnings-are-errors -prefix $pwd/../qt5 -platform win32-g++`
+            -no-warnings-are-errors -prefix $pwd/../qt5 -platform win32-g++ `
             -opensource -confirm-license -release -nomake examples -nomake tests `
             -no-compile-examples -no-feature-testlib -skip qt3d -skip qtactiveqt -skip `
             qtcanvas3d -skip qtcharts -skip qtdatavis3d -skip qtdeclarative -skip qtdoc `
