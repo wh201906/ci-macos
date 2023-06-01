@@ -49,26 +49,26 @@ jobs:
           rm Qt-source.tar.xz
           rm Qt-source.tar
       
-      - name: Set up Visual Studio shell
-        uses: egor-tensin/vs-shell@v2
-        with:
-          arch: x64
+      # - name: Set up Visual Studio shell
+      #   uses: egor-tensin/vs-shell@v2
+      #   with:
+      #     arch: x64
 
       - name: Configure Qt
         run: |
           
           cd build
-          ../qt-everywhere-src-${{ env.QT_VERSION }}/configure.bat --disable-rpath \
-            -no-warnings-are-errors -prefix $pwd/../qt5 \
-            -opensource -confirm-license -release -nomake examples -nomake tests \
-            -no-compile-examples -no-feature-testlib -skip qt3d -skip qtactiveqt -skip \
-            qtcanvas3d -skip qtcharts -skip qtdatavis3d -skip qtdeclarative -skip qtdoc \
-            -skip qtgamepad -skip qtgraphicaleffects -skip qtmacextras -skip qtmultimedia \
-            -skip qtnetworkauth -skip qtpurchasing -skip qtquickcontrols -skip qtquickcontrols2 \
-            -skip qtremoteobjects -skip qtscxml -skip qtspeech -skip qtwayland -skip qtwebview \
-            -skip qtwinextras -skip qtx11extras -skip qtwebengine -skip qtlocation -skip \
-            qtlottie -skip qtquick3d -skip qtquicktimeline -skip qtscript -skip qtsensors \
-            -skip qtserialbus -skip qtxmlpatterns -skip qtwebglplugin -skip \
+          ../qt-everywhere-src-${{ env.QT_VERSION }}/configure.bat --disable-rpath `
+            -no-warnings-are-errors -prefix $pwd/../qt5 -platform win32-g++`
+            -opensource -confirm-license -release -nomake examples -nomake tests `
+            -no-compile-examples -no-feature-testlib -skip qt3d -skip qtactiveqt -skip `
+            qtcanvas3d -skip qtcharts -skip qtdatavis3d -skip qtdeclarative -skip qtdoc `
+            -skip qtgamepad -skip qtgraphicaleffects -skip qtmacextras -skip qtmultimedia `
+            -skip qtnetworkauth -skip qtpurchasing -skip qtquickcontrols -skip qtquickcontrols2 `
+            -skip qtremoteobjects -skip qtscxml -skip qtspeech -skip qtwayland -skip qtwebview `
+            -skip qtwinextras -skip qtx11extras -skip qtwebengine -skip qtlocation -skip `
+            qtlottie -skip qtquick3d -skip qtquicktimeline -skip qtscript -skip qtsensors `
+            -skip qtserialbus -skip qtxmlpatterns -skip qtwebglplugin -skip `
             qtwebchannel -skip qtvirtualkeyboard -skip qttranslations
 
       - name: Build Qt
