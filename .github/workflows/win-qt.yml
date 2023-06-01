@@ -21,10 +21,6 @@ jobs:
         run: |
           choco install mingw --version=8.1.0 --allow-downgrade
 
-      - name: Resolve OpenGL not found
-        run: |
-          choco install directx
-
       - name: Checkout repo
         uses: actions/checkout@v3
 
@@ -67,7 +63,7 @@ jobs:
             -skip qtwinextras -skip qtx11extras -skip qtwebengine -skip qtlocation -skip `
             qtlottie -skip qtquick3d -skip qtquicktimeline -skip qtscript -skip qtsensors `
             -skip qtserialbus -skip qtxmlpatterns -skip qtwebglplugin -skip `
-            qtwebchannel -skip qtvirtualkeyboard -skip qttranslations
+            qtwebchannel -skip qtvirtualkeyboard -skip qttranslations -opengl desktop
 
       - name: Build Qt
         run: |
