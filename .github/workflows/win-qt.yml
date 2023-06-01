@@ -17,6 +17,10 @@ jobs:
     runs-on:  windows-latest
 
     steps:
+      - name: Test
+        run: |
+          gcm fxc.exe
+
       - name: Downgrade MinGW-w64
         run: |
           choco install mingw --version=8.1.0 --allow-downgrade
