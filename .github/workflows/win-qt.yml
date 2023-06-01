@@ -20,6 +20,9 @@ jobs:
         file: [fxc.exe, d3dcompiler.h, d3d11.lib, libd3d11.a, egl.h]
 
     steps:
+      - name: D3D
+        run: |
+          choco install directx
       - name: Find
         continue-on-error: true
         run: |
