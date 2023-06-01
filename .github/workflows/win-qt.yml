@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: Test
         run: |
-          Get-ChildItem -Path C:\ -Recurse -EA 0 fxc.exe
+          Get-ChildItem -Path D:\ -Recurse -EA 0 fxc.exe
 
       - name: Downgrade MinGW-w64
         run: |
@@ -85,7 +85,7 @@ jobs:
       - name: Build
         working-directory: ${{ runner.temp }}/shadow_build_dir
         run:  |
-              ${{ github.workspace }}/qt5/bin/qmake -r ${ env.SOURCE_DIR }/src/SerialTest.pro
+              ${{ github.workspace }}/qt5/bin/qmake -r SerialTest/src/SerialTest.pro
               mingw32-make -j $(nproc)
 
       # - name: Generate DMG file
