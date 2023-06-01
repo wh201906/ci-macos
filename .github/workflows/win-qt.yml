@@ -9,7 +9,7 @@ defaults:
 env:
   CC: gcc
   SOURCE_DIR:   ${{ github.workspace }}/SerialTest
-  QT_VERSION:   5.15.9
+  QT_VERSION:   5.15.2
   # ARTIFACT:     SerialTest.dmg
 
 jobs:
