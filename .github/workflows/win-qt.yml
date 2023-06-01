@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: Test
         run: |
-          Get-ChildItem -Path C:\ -Recurse fxc.exe
+          Get-ChildItem -Path C:\ -Recurse -EA 0 fxc.exe
 
       - name: Downgrade MinGW-w64
         run: |
