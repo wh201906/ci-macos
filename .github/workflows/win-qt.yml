@@ -17,7 +17,7 @@ jobs:
     runs-on:  windows-latest
 
     steps:
-      - name: Downgrade MingW-w64
+      - name: Downgrade MinGW-w64
         run: |
           choco install mingw --version=8.1.0 --allow-downgrade
 
@@ -68,12 +68,12 @@ jobs:
       - name: Build Qt
         run: |
           cd build
-          mingw32-make -j$(nproc)
+          mingw32-make -j $(nproc)
       
       - name: Install Qt
         run: |
           cd build
-          mingw32-make -j1 install
+          mingw32-make -j 1 install
 
       - name: Create build directory
         run:  mkdir ${{ runner.temp }}/shadow_build_dir
@@ -82,7 +82,7 @@ jobs:
         working-directory: ${{ runner.temp }}/shadow_build_dir
         run:  |
               ${{ github.workspace }}/qt5/bin/qmake -r ${SOURCE_DIR}/src/SerialTest.pro
-              mingw32-make -j$(nproc)
+              mingw32-make -j $(nproc)
 
       # - name: Generate DMG file
       #   run: |
