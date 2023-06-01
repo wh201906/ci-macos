@@ -21,6 +21,10 @@ jobs:
         run: |
           choco install mingw --version=8.1.0 --allow-downgrade
 
+      - name: Resolve OpenGL not found
+        run: |
+          choco install directx
+
       - name: Checkout repo
         uses: actions/checkout@v3
 
