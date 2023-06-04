@@ -84,11 +84,10 @@ jobs:
               ${{ github.workspace }}/qt5/bin/qmake -r SerialTest/src/SerialTest.pro
               mingw32-make -j $(nproc)
 
-      - name: List results
+      - name: Show dependency
         run: |
-          tree /F
-          ldd ./SerialTest.exe
-          ./SerialTest.exe --help
+          ldd ./release/SerialTest.exe
+          ./release/SerialTest.exe --help
 
       # - name: Generate DMG file
       #   run: |
