@@ -13,21 +13,6 @@ env:
   # ARTIFACT:     SerialTest.dmg
 
 jobs:
-  find:
-    runs-on:  windows-latest
-    strategy:
-      matrix:
-        file: [fxc.exe, d3dcompiler.h, d3d11.lib, libd3d11.a, egl.h]
-
-    steps:
-      - name: D3D
-        run: |
-          choco install directx
-      - name: Find
-        continue-on-error: true
-        run: |
-          Get-ChildItem -Path C:\ -Recurse -EA 0 ${{ matrix.file }}
-    
   build:
     runs-on:  windows-latest
 
@@ -95,10 +80,15 @@ jobs:
         run:  mkdir ${{ runner.temp }}/shadow_build_dir
 
       - name: Build
-
         run:  |
               ${{ github.workspace }}/qt5/bin/qmake -r SerialTest/src/SerialTest.pro
               mingw32-make -j $(nproc)
+
+      - name: List results
+        run: |
+          tree /F
+          ldd ./SerialTest.exe
+          ./SerialTest.exe --help
 
       # - name: Generate DMG file
       #   run: |
