@@ -21,7 +21,7 @@ jobs:
       - name: Run script
         run: |
           iconutil -c icns icons.iconset -o icon.icns
-          iconutil -c iconset icon.icns -o out
+          iconutil -c iconset icon.icns -o out.iconset
         
       - name: upload
         uses: actions/upload-artifact@v3
@@ -29,5 +29,5 @@ jobs:
           name: icon
           path: | 
             icon.icns
-            out/*
+            out.iconset/*
         
