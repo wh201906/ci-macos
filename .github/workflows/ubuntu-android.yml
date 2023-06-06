@@ -29,7 +29,6 @@ jobs:
 
       - name: Install Qt
         run: |
-          sudo add-apt-repository -y universe
           sudo apt-get update
           sudo apt-get install -y qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools libqt5serialport5-dev qtconnectivity5-dev
 
@@ -39,9 +38,8 @@ jobs:
       - name: Build
         working-directory: ${{ runner.temp }}/shadow_build_dir
         run:  |
-              export JOBS=$((`sysctl -n hw.ncpu`+1))
               qmake -r ${SOURCE_DIR}/src/SerialTest.pro
-              make -j$JOBS apk_install_target
+              make -j$(nproc) apk_install_target
               androiddeployqt --release --output ./ --input android-SerialTest-deployment-settings.json
 
       - name: Show files
