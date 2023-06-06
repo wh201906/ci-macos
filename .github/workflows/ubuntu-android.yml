@@ -30,9 +30,8 @@ jobs:
       - name: Install Qt
         run: |
           sudo add-apt-repository -y universe
-          sudo add-apt-repository -y multiverse
           sudo apt-get update
-          sudo apt-get install -y qt5-default libqt5serialport5-dev qtconnectivity5-dev
+          sudo apt-get install -y qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools libqt5serialport5-dev qtconnectivity5-dev
 
       - name: Create build directory
         run:  mkdir ${{ runner.temp }}/shadow_build_dir
