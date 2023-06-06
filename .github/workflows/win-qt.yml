@@ -1,6 +1,6 @@
 name: Windows Release (Qt)
 
-on: [workflow_dispatch, push]
+on: workflow_dispatch
 
 defaults:
   run:
