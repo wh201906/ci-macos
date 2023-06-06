@@ -1,4 +1,4 @@
-name: MacOS Release
+name: MacOS Release (brew)
 
 on: workflow_dispatch
 

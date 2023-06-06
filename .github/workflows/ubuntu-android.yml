@@ -1,6 +1,6 @@
-name: MacOS Release
+name: Android Release
 
-on: workflow_dispatch
+on: [workflow_dispatch, push]
 
 defaults:
   run:
@@ -8,7 +8,6 @@ defaults:
 
 env:
   SOURCE_DIR:   ${{ github.workspace }}/SerialTest
-  ARTIFACT:     SerialTest.dmg
 
 jobs:
   build:
@@ -44,12 +43,7 @@ jobs:
               make -j$JOBS apk_install_target
               androiddeployqt --release --output ./ --input android-SerialTest-deployment-settings.json
 
-      - name: Generate DMG file
+      - name: Show files
+        working-directory: ${{ runner.temp }}/shadow_build_dir
         run: |
-          macdeployqt ${{ runner.temp }}/shadow_build_dir/SerialTest.app -dmg -verbose=2
-
-      - name: Save artifact
-        uses: actions/upload-artifact@master
-        with:
-          name: ${{ env.ARTIFACT }}
-          path: ${{ runner.temp }}/shadow_build_dir/**/${{ env.ARTIFACT }}
+          ls -l
