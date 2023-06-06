@@ -29,6 +29,8 @@ jobs:
 
       - name: Install Qt
         run: |
+          cat /etc/apt/sources.list
+          sudo add-apt-repository universe
           sudo apt-get update
           sudo apt-get install -y qt5-default qt5-default libqt5serialport5-dev qtconnectivity5-dev
 
