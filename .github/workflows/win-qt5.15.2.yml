@@ -4,7 +4,7 @@ on: [ workflow_dispatch, push ]
 
 defaults:
   run:
-    shell: msys2 {0}
+    shell: pwsh
 
 jobs:
   build:
@@ -15,41 +15,31 @@ jobs:
     runs-on:  windows-latest
 
     steps:
-      - name: Install packages
-        uses: msys2/setup-msys2@v2
-        with:
-          update: true
-          install: >-
-            git
-            wget
-            tar
-            make
-
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
           version: '5.15.2'
           host: 'windows'
           target: 'desktop'
-          arch: '${{ matrix.sys }}_mingw81'
-          tools: 'tools_mingw,qt.tools.${{ matrix.sys }}_mingw810'
-      
-      # https://github.com/msys2/setup-msys2/tree/ee7b70729a6248e4dee7e3b299eae8965eab9980#actionscheckout-and-line-endings
-      - name: Configure line ending
-        run: git config --global core.autocrlf input
+          arch: '${{ matrix.arch }}_mingw81'
+          tools: 'tools_mingw,qt.tools.${{ matrix.arch }}_mingw810'
 
       - name: Checkout repo
         uses: actions/checkout@v3
 
+      - name: Checkout SerialTest
+        run: |
+          git clone https://github.com/wh201906/SerialTest
+
       - name: Download QCustomPlot
         run: |
-          wget "https://www.qcustomplot.com/release/2.1.1/QCustomPlot-source.tar.gz"
+          Invoke-WebRequest "https://www.qcustomplot.com/release/2.1.1/QCustomPlot-source.tar.gz" -outfile "QCustomPlot-source.tar.gz" -Passthru
           tar -xvzf QCustomPlot-source.tar.gz
-          cp qcustomplot-source/qcustomplot.* ./src
+          cp qcustomplot-source/qcustomplot.* SerialTest/src
 
       - name: Build
         run:  |
-          qmake -r ./src/SerialTest.pro
+          qmake -r SerialTest/src/SerialTest.pro
           make -j $(nproc)
           make clean
 
@@ -63,6 +53,6 @@ jobs:
       - name: Save artifact
         uses: actions/upload-artifact@master
         with:
-          name: SerialTest-${{ matrix.sys }}
+          name: SerialTest-${{ matrix.arch }}
           path: ./release/*
           
