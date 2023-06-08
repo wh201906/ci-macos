@@ -15,7 +15,61 @@ jobs:
     runs-on:  windows-latest
 
     steps:
-      - name: Install Qt
+      - name: Install Qt 1
+        id: qt1
+        continue-on-error: true
+        uses: jurplel/install-qt-action@v3
+        with:
+          aqtversion: '==3.1.*'
+          version: '5.15.2'
+          host: 'windows'
+          target: 'desktop'
+          arch: '${{ matrix.arch }}_mingw81'
+          tools: 'tools_mingw,qt.tools.${{ matrix.arch }}_mingw810'
+
+      - name: Install Qt 2
+        id: qt2
+        continue-on-error: true
+        if: steps.qt1.outcome == 'failure'
+        uses: jurplel/install-qt-action@v3
+        with:
+          aqtversion: '==3.1.*'
+          version: '5.15.2'
+          host: 'windows'
+          target: 'desktop'
+          arch: '${{ matrix.arch }}_mingw81'
+          tools: 'tools_mingw,qt.tools.${{ matrix.arch }}_mingw810'
+
+      - name: Install Qt 3
+        id: qt3
+        continue-on-error: true
+        if: steps.qt2.outcome == 'failure'
+        uses: jurplel/install-qt-action@v3
+        with:
+          aqtversion: '==3.1.*'
+          version: '5.15.2'
+          host: 'windows'
+          target: 'desktop'
+          arch: '${{ matrix.arch }}_mingw81'
+          tools: 'tools_mingw,qt.tools.${{ matrix.arch }}_mingw810'
+
+      - name: Install Qt 4
+        id: qt4
+        continue-on-error: true
+        if: steps.qt3.outcome == 'failure'
+        uses: jurplel/install-qt-action@v3
+        with:
+          aqtversion: '==3.1.*'
+          version: '5.15.2'
+          host: 'windows'
+          target: 'desktop'
+          arch: '${{ matrix.arch }}_mingw81'
+          tools: 'tools_mingw,qt.tools.${{ matrix.arch }}_mingw810'
+
+      - name: Install Qt 5
+        id: qt5
+        continue-on-error: true
+        if: steps.qt4.outcome == 'failure'
         uses: jurplel/install-qt-action@v3
         with:
           aqtversion: '==3.1.*'
