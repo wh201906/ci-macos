@@ -15,6 +15,9 @@ jobs:
     runs-on:  windows-latest
 
     steps:
+      - name: Uninstall builtin mingw
+        run: choco uninstall mingw
+
       - name: Install Qt 1
         id: qt1
         continue-on-error: true
