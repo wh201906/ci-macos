@@ -18,12 +18,11 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
-          aqtversion: '==3.1.*'
-          version: '5.15.2'
-          host: 'windows'
-          target: 'desktop'
-          arch: 'win64_mingw81'
-          tools: 'tools_mingw,qt.tools.win64_mingw810'
+          version:      5.15.2
+          host:         windows
+          target:       desktop
+          arch:         win64_msvc2019_64
+          setup-python: false
 
       - name: Checkout repo
         uses: actions/checkout@v3
