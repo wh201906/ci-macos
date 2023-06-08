@@ -103,7 +103,7 @@ jobs:
           cd ./release
           windeployqt ./SerialTest.exe
           python ../SerialTest/pack/find_dlls.py ./SerialTest.exe
-          ls -l
+          ls
 
       - name: Save artifact
         uses: actions/upload-artifact@master
